@@ -1,16 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="420" height="152" viewBox="0 0 420 152">
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="266" viewBox="0 0 460 266">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#121820"/>
+      <stop offset="1" stop-color="#0d1117"/>
+    </linearGradient>
+    <clipPath id="avatarClip">
+      <rect x="24" y="24" width="64" height="64" rx="8"/>
+    </clipPath>
+  </defs>
+  <image href="https://avatars.steamstatic.com/bd162d28bca4a827f0ef7dc55954cea2068f1eac_full.jpg" x="24" y="24" width="64" height="64" clip-path="url(#avatarClip)"/>
+  <rect x="24" y="24" width="64" height="64" rx="8" fill="none" stroke="#30363d" stroke-width="1"/>
+  <rect class="card" x="0.5" y="0.5" width="459" height="265" rx="10" fill="url(#bg)" stroke="#30363d"/>
+  <rect x="0.5" y="0.5" width="459" height="3" rx="1.5" fill="#66c0f4"/>
+
+  <text x="104" y="40" class="title">S1H1NSal</text>
+  <circle cx="110" cy="63" r="5" fill="#6e7681"/>
+  <circle cx="110" cy="63" r="8" fill="#6e7681" opacity="0.18"/>
+  <text x="122" y="67" class="headline">Offline</text>
+
+  <line x1="24" y1="110" x2="436" y2="110" stroke="#21262d" stroke-width="1"/>
+  <text x="24" y="130" class="section">Recently Played (last 2 weeks)</text>
+  
+      <text x="24" y="158" class="game">S.T.A.L.K.E.R. 2: Heart of Chornobyl</text>
+      <text x="436" y="158" text-anchor="end" class="hours">0.8 hrs</text>
+      <rect x="24" y="166" width="412" height="6" rx="3" class="track"/>
+      <rect x="24" y="166" width="412.0" height="6" rx="3" fill="#66c0f4"/>
+      <text x="24" y="192" class="game">The Witcher 3: Wild Hunt — Remastered</text>
+      <text x="436" y="192" text-anchor="end" class="hours">0.1 hrs</text>
+      <rect x="24" y="200" width="412" height="6" rx="3" class="track"/>
+      <rect x="24" y="200" width="26.3" height="6" rx="3" fill="#66c0f4"/>
+
+  <text x="436" y="250" text-anchor="end" class="footer">Updated 2026-11-05 04:40 UTC</text>
+
   <style>
-    .card { fill: #0d1117; stroke: #30363d; stroke-width: 1; }
-    .title { font: 600 15px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #c9d1d9; }
-    .headline { font: 600 13px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #e6edf3; }
+    .title { font: 600 16px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #e6edf3; }
+    .headline { font: 500 13px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #c9d1d9; }
     .section { font: 600 11px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #8b949e; letter-spacing: 0.06em; text-transform: uppercase; }
-    .game { font: 400 12px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #c9d1d9; }
-    .hours { font: 400 12px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #8b949e; }
+    .game { font: 500 12px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #c9d1d9; }
+    .game-muted { font: 400 12px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #6e7681; }
+    .hours { font: 400 11px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #8b949e; }
+    .footer { font: 400 10px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #484f58; }
+    .track { fill: #21262d; }
   </style>
-  <rect class="card" x="0.5" y="0.5" width="419" height="151" rx="6"/>
-  <text x="24" y="30" class="title">S1H1NSal — Steam Status</text>
-  <circle cx="30" cy="54" r="5" fill="#8a8a8a"/>
-  <text x="42" y="58" class="headline">Offline</text>
-  <text x="24" y="80" class="section">Recently Played</text>
-  <text x="24" y="92" class="game">S.T.A.L.K.E.R. 2: Heart of Chornobyl</text><text x="396" y="92" text-anchor="end" class="hours">0.8 hrs (2wk)</text><text x="24" y="114" class="game">The Witcher 3: Wild Hunt — Remastered</text><text x="396" y="114" text-anchor="end" class="hours">0.1 hrs (2wk)</text>
 </svg>

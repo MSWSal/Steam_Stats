@@ -13,6 +13,7 @@ OUTPUT_PATH = os.environ.get("OUTPUT_PATH", "assets/steam-card.svg")
 
 SUMMARY_URL = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/"
 RECENT_URL = "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/"
+OWNED_URL = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/"
 
 STATUS_NAMES = {
     0: "Offline",
@@ -60,16 +61,61 @@ def fetch_recent():
     return data.get("games", [])
 
 
+def fetch_owned_games():
+    resp = requests.get(
+        OWNED_URL,
+        params={
+            "key": API_KEY,
+            "steamid": STEAM_ID,
+            "include_appinfo": 1,
+            "include_played_free_games": 1,
+        },
+        timeout=15,
+    )
+    resp.raise_for_status()
+    data = resp.json()["response"]
+    return data.get("game_count", 0), data.get("games", [])
+
+
 def esc(text):
     return html.escape(str(text), quote=True)
 
 
-def render_svg(summary, recent_games):
+def bar_rows_block(games, key, width, start_y, row_height, limit, empty_message):
+    rows = games[:limit]
+    bar_track_w = width - 48
+    max_val = max((g.get(key, 0) for g in rows), default=0)
+
+    blocks = []
+    y = start_y
+    if rows:
+        for game in rows:
+            name = esc(game.get("name", "Unknown game"))
+            minutes = game.get(key, 0)
+            hours = minutes / 60
+            frac = (minutes / max_val) if max_val else 0
+            fill_w = max(bar_track_w * frac, 6)
+            blocks.append(f'''
+      <text x="24" y="{y}" class="game">{name}</text>
+      <text x="{width - 24}" y="{y}" text-anchor="end" class="hours">{hours:,.1f} hrs</text>
+      <rect x="24" y="{y + 8}" width="{bar_track_w}" height="6" rx="3" class="track"/>
+      <rect x="24" y="{y + 8}" width="{fill_w:.1f}" height="6" rx="3" fill="{ACCENT}"/>''')
+            y += row_height
+        bottom = y + 4
+    else:
+        blocks.append(f'<text x="24" y="{y}" class="game-muted">{esc(empty_message)}</text>')
+        bottom = y + 10
+    return "".join(blocks), bottom
+
+
+def render_svg(summary, recent_games, game_count, owned_games):
     in_game = "gameextrainfo" in summary
     status_code = summary.get("personastate", 0)
     status_label = STATUS_NAMES.get(status_code, "Unknown")
     persona = summary.get("personaname", "Steam User")
     avatar_url = summary.get("avatarfull", "")
+    profile_url = summary.get("profileurl", "")
+    country = summary.get("loccountrycode", "")
 
     if in_game:
         headline = f"Playing {summary['gameextrainfo']}"
@@ -78,40 +124,37 @@ def render_svg(summary, recent_games):
         headline = status_label
         dot_color = STATUS_COLORS.get(status_code, "#6e7681")
 
-    width = 460
+    width = 480
     avatar_size = 64
-    header_h = 110
-    bar_section_top = header_h + 48
+    header_h = 118
     row_height = 34
-    bottom_padding = 36
 
-    rows = recent_games[:3]
-    max_minutes = max((g.get("playtime_2weeks", 0) for g in rows), default=0)
-    bar_track_w = width - 48
+    text_x = 24 + avatar_size + 16 if avatar_url else 24
+    subtitle_parts = [p for p in [profile_url.replace("https://", ""), country] if p]
+    subtitle = "  ·  ".join(subtitle_parts)
 
-    bar_rows = []
-    y = bar_section_top
-    if rows:
-        for game in rows:
-            name = esc(game.get("name", "Unknown game"))
-            minutes_2w = game.get("playtime_2weeks", 0)
-            hours_2w = minutes_2w / 60
-            frac = (minutes_2w / max_minutes) if max_minutes else 0
-            fill_w = max(bar_track_w * frac, 6)
-            bar_rows.append(f'''
-      <text x="24" y="{y}" class="game">{name}</text>
-      <text x="{width - 24}" y="{y}" text-anchor="end" class="hours">{hours_2w:.1f} hrs</text>
-      <rect x="24" y="{y + 8}" width="{bar_track_w}" height="6" rx="3" class="track"/>
-      <rect x="24" y="{y + 8}" width="{fill_w:.1f}" height="6" rx="3" fill="{ACCENT}"/>''')
-            y += row_height
-        content_bottom = y + 4
-    else:
-        bar_rows.append(
-            f'<text x="24" y="{y}" class="game-muted">No games played in the last 2 weeks</text>'
-        )
-        content_bottom = y + 10
+    # Stat tiles: games owned / lifetime hours
+    total_minutes = sum(g.get("playtime_forever", 0) for g in owned_games)
+    total_hours = total_minutes / 60
+    stats_top = header_h + 14
+    stats_bottom = stats_top + 46
 
-    height = content_bottom + bottom_padding
+    # Top games all-time (by playtime_forever)
+    top_games_sorted = sorted(owned_games, key=lambda g: g.get("playtime_forever", 0), reverse=True)
+    top_section_label_y = stats_bottom + 24
+    top_bars, top_bottom = bar_rows_block(
+        top_games_sorted, "playtime_forever", width, top_section_label_y + 18, row_height, 5,
+        "No playtime data available",
+    )
+
+    # Recently played (last 2 weeks)
+    recent_section_label_y = top_bottom + 20
+    recent_bars, recent_bottom = bar_rows_block(
+        recent_games, "playtime_2weeks", width, recent_section_label_y + 18, row_height, 3,
+        "No games played in the last 2 weeks",
+    )
+
+    height = recent_bottom + 36
     updated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
     avatar_markup = ""
@@ -126,8 +169,6 @@ def render_svg(summary, recent_games):
     else:
         avatar_markup = "\n  </defs>"
 
-    text_x = 24 + avatar_size + 16 if avatar_url else 24
-
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
@@ -138,18 +179,32 @@ def render_svg(summary, recent_games):
   <rect x="0.5" y="0.5" width="{width - 1}" height="3" rx="1.5" fill="{ACCENT}"/>
 
   <text x="{text_x}" y="40" class="title">{esc(persona)}</text>
-  <circle cx="{text_x + 6}" cy="63" r="5" fill="{dot_color}"/>
-  <circle cx="{text_x + 6}" cy="63" r="8" fill="{dot_color}" opacity="0.18"/>
-  <text x="{text_x + 18}" y="67" class="headline">{esc(headline)}</text>
+  <text x="{text_x}" y="56" class="subtitle">{esc(subtitle)}</text>
+  <circle cx="{text_x + 6}" cy="78" r="5" fill="{dot_color}"/>
+  <circle cx="{text_x + 6}" cy="78" r="8" fill="{dot_color}" opacity="0.18"/>
+  <text x="{text_x + 18}" y="82" class="headline">{esc(headline)}</text>
 
   <line x1="24" y1="{header_h}" x2="{width - 24}" y2="{header_h}" stroke="#21262d" stroke-width="1"/>
-  <text x="24" y="{header_h + 20}" class="section">Recently Played (last 2 weeks)</text>
-  {''.join(bar_rows)}
+
+  <text x="24" y="{stats_top + 16}" class="stat-num">{game_count:,}</text>
+  <text x="24" y="{stats_top + 32}" class="stat-label">Games Owned</text>
+  <text x="{width / 2 + 12:.0f}" y="{stats_top + 16}" class="stat-num">{total_hours:,.0f}</text>
+  <text x="{width / 2 + 12:.0f}" y="{stats_top + 32}" class="stat-label">Lifetime Hours</text>
+  <line x1="{width / 2:.0f}" y1="{stats_top - 4}" x2="{width / 2:.0f}" y2="{stats_bottom - 10}" stroke="#21262d" stroke-width="1"/>
+
+  <line x1="24" y1="{stats_bottom}" x2="{width - 24}" y2="{stats_bottom}" stroke="#21262d" stroke-width="1"/>
+  <text x="24" y="{top_section_label_y}" class="section">Top Games (All Time)</text>
+  {top_bars}
+
+  <line x1="24" y1="{top_bottom + 8}" x2="{width - 24}" y2="{top_bottom + 8}" stroke="#21262d" stroke-width="1"/>
+  <text x="24" y="{recent_section_label_y}" class="section">Recently Played (Last 2 Weeks)</text>
+  {recent_bars}
 
   <text x="{width - 24}" y="{height - 16}" text-anchor="end" class="footer">Updated {updated}</text>
 
   <style>
     .title {{ font: 600 16px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #e6edf3; }}
+    .subtitle {{ font: 400 11px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #6e7681; }}
     .headline {{ font: 500 13px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #c9d1d9; }}
     .section {{ font: 600 11px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #8b949e; letter-spacing: 0.06em; text-transform: uppercase; }}
     .game {{ font: 500 12px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #c9d1d9; }}
@@ -157,6 +212,8 @@ def render_svg(summary, recent_games):
     .hours {{ font: 400 11px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #8b949e; }}
     .footer {{ font: 400 10px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #484f58; }}
     .track {{ fill: #21262d; }}
+    .stat-num {{ font: 700 20px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #e6edf3; }}
+    .stat-label {{ font: 600 10px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #8b949e; letter-spacing: 0.05em; text-transform: uppercase; }}
   </style>
 </svg>'''
     return svg
@@ -165,7 +222,8 @@ def render_svg(summary, recent_games):
 def main():
     summary = fetch_summary()
     recent_games = fetch_recent()
-    svg = render_svg(summary, recent_games)
+    game_count, owned_games = fetch_owned_games()
+    svg = render_svg(summary, recent_games, game_count, owned_games)
 
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:

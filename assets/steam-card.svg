@@ -15,9 +15,9 @@
 
   <text x="104" y="40" class="title">S1H1NSal</text>
   <text x="104" y="56" class="subtitle">steamcommunity.com/profiles/76561199131035728/  ·  LK</text>
-  <circle cx="110" cy="78" r="5" fill="#e3b341"/>
-  <circle cx="110" cy="78" r="8" fill="#e3b341" opacity="0.18"/>
-  <text x="122" y="82" class="headline">Away</text>
+  <circle cx="110" cy="78" r="5" fill="#6e7681"/>
+  <circle cx="110" cy="78" r="8" fill="#6e7681" opacity="0.18"/>
+  <text x="122" y="82" class="headline">Offline</text>
 
   <line x1="24" y1="118" x2="456" y2="118" stroke="#21262d" stroke-width="1"/>
 
@@ -63,7 +63,7 @@
       <rect x="24" y="474" width="432" height="6" rx="3" class="track"/>
       <rect x="24" y="474" width="27.6" height="6" rx="3" fill="#66c0f4"/>
 
-  <text x="456" y="524" text-anchor="end" class="footer">Updated 2026-11-05 20:29 UTC</text>
+  <text x="456" y="524" text-anchor="end" class="footer">Updated 2026-11-06 01:04 UTC</text>
 
   <style>
     .title { font: 600 16px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #e6edf3; }

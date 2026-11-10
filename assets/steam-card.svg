@@ -54,20 +54,20 @@
   <line x1="24" y1="402" x2="456" y2="402" stroke="#21262d" stroke-width="1"/>
   <text x="24" y="414" class="section">Recently Played (Last 2 Weeks)</text>
   
-      <text x="24" y="432" class="game">S.T.A.L.K.E.R. 2: Heart of Chornobyl</text>
-      <text x="456" y="432" text-anchor="end" class="hours">0.8 hrs</text>
+      <text x="24" y="432" class="game">Assassin&#x27;s Creed Brotherhood</text>
+      <text x="456" y="432" text-anchor="end" class="hours">0.5 hrs</text>
       <rect x="24" y="440" width="432" height="6" rx="3" class="track"/>
       <rect x="24" y="440" width="432.0" height="6" rx="3" fill="#66c0f4"/>
-      <text x="24" y="466" class="game">Assassin&#x27;s Creed Brotherhood</text>
-      <text x="456" y="466" text-anchor="end" class="hours">0.5 hrs</text>
+      <text x="24" y="466" class="game">S.T.A.L.K.E.R. 2: Heart of Chornobyl</text>
+      <text x="456" y="466" text-anchor="end" class="hours">0.3 hrs</text>
       <rect x="24" y="474" width="432" height="6" rx="3" class="track"/>
-      <rect x="24" y="474" width="266.6" height="6" rx="3" fill="#66c0f4"/>
+      <rect x="24" y="474" width="253.2" height="6" rx="3" fill="#66c0f4"/>
       <text x="24" y="500" class="game">Just Cause 2</text>
       <text x="456" y="500" text-anchor="end" class="hours">0.2 hrs</text>
       <rect x="24" y="508" width="432" height="6" rx="3" class="track"/>
-      <rect x="24" y="508" width="128.7" height="6" rx="3" fill="#66c0f4"/>
+      <rect x="24" y="508" width="208.6" height="6" rx="3" fill="#66c0f4"/>
 
-  <text x="456" y="558" text-anchor="end" class="footer">Updated 2026-11-09 18:25 UTC</text>
+  <text x="456" y="558" text-anchor="end" class="footer">Updated 2026-11-10 01:43 UTC</text>
 
   <style>
     .title { font: 600 16px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #e6edf3; }

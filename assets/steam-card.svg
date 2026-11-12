@@ -55,15 +55,15 @@
   <text x="24" y="414" class="section">Recently Played (Last 2 Weeks)</text>
   
       <text x="24" y="432" class="game">Assassin&#x27;s Creed Brotherhood</text>
-      <text x="456" y="432" text-anchor="end" class="hours">0.8 hrs</text>
+      <text x="456" y="432" text-anchor="end" class="hours">0.9 hrs</text>
       <rect x="24" y="440" width="432" height="6" rx="3" class="track"/>
       <rect x="24" y="440" width="432.0" height="6" rx="3" fill="#66c0f4"/>
       <text x="24" y="466" class="game">Just Cause 2</text>
       <text x="456" y="466" text-anchor="end" class="hours">0.2 hrs</text>
       <rect x="24" y="474" width="432" height="6" rx="3" class="track"/>
-      <rect x="24" y="474" width="134.4" height="6" rx="3" fill="#66c0f4"/>
+      <rect x="24" y="474" width="112.0" height="6" rx="3" fill="#66c0f4"/>
 
-  <text x="456" y="524" text-anchor="end" class="footer">Updated 2026-11-12 07:32 UTC</text>
+  <text x="456" y="524" text-anchor="end" class="footer">Updated 2026-11-12 16:37 UTC</text>
 
   <style>
     .title { font: 600 16px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #e6edf3; }

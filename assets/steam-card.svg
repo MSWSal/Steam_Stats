@@ -59,15 +59,15 @@
       <rect x="24" y="440" width="432" height="6" rx="3" class="track"/>
       <rect x="24" y="440" width="432.0" height="6" rx="3" fill="#66c0f4"/>
       <text x="24" y="466" class="game">Assassin&#x27;s Creed Brotherhood</text>
-      <text x="456" y="466" text-anchor="end" class="hours">4.1 hrs</text>
+      <text x="456" y="466" text-anchor="end" class="hours">3.6 hrs</text>
       <rect x="24" y="474" width="432" height="6" rx="3" class="track"/>
-      <rect x="24" y="474" width="96.0" height="6" rx="3" fill="#66c0f4"/>
+      <rect x="24" y="474" width="84.8" height="6" rx="3" fill="#66c0f4"/>
       <text x="24" y="500" class="game">Batman: Arkham City GOTY</text>
       <text x="456" y="500" text-anchor="end" class="hours">2.8 hrs</text>
       <rect x="24" y="508" width="432" height="6" rx="3" class="track"/>
       <rect x="24" y="508" width="64.9" height="6" rx="3" fill="#66c0f4"/>
 
-  <text x="456" y="558" text-anchor="end" class="footer">Updated 2026-11-27 14:44 UTC</text>
+  <text x="456" y="558" text-anchor="end" class="footer">Updated 2026-11-27 23:14 UTC</text>
 
   <style>
     .title { font: 600 16px -apple-system, Segoe UI, Helvetica, Arial, sans-serif; fill: #e6edf3; }
